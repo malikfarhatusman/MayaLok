@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Encrypted File Vault</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .glass { background: rgba(255,255,255,0.8); backdrop-filter: blur(18px); }
+    .hidden-scroll::-webkit-scrollbar { width: 8px; }
+    .hidden-scroll::-webkit-scrollbar-thumb { background: rgba(148,163,184,0.6); border-radius: 9999px; }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen py-10 px-4">
+  <div class="mx-auto max-w-6xl">
+    <div id="loginContainer" class="glass rounded-3xl border border-white/10 p-8 shadow-2xl shadow-slate-900/40">
+      <div class="mb-8">
+        <div class="inline-flex items-center gap-4 rounded-full bg-slate-900/70 px-4 py-3 text-sm text-slate-300 shadow-sm shadow-slate-950/30">
+          <span class="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-cyan-500/15 text-cyan-300 text-lg">🔒</span>
+          <span>Private vault for documents, photos, videos and secure files.</span>
+        </div>
+        <h1 class="mt-6 text-5xl font-semibold tracking-tight text-white">Vault Login</h1>
+        <p class="mt-3 text-slate-400 max-w-2xl">Enter the default test credentials to unlock your encrypted personal vault. This demo vault stores files locally in the browser.</p>
+        <p class="mt-3 text-sm text-cyan-300">Default login: <strong>admin</strong> / <strong>admin</strong></p>
+      </div>
+      <div class="space-y-5">
+        <div>
+          <label class="mb-2 block text-sm font-medium text-slate-300">Username</label>
+          <input id="username" type="text" value="admin" class="w-full rounded-3xl border border-slate-700 bg-slate-950/90 px-4 py-3 text-slate-100 outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-500/20" />
+        </div>
+        <div>
+          <label class="mb-2 block text-sm font-medium text-slate-300">Password</label>
+          <input id="loginPassword" type="password" value="admin" class="w-full rounded-3xl border border-slate-700 bg-slate-950/90 px-4 py-3 text-slate-100 outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-500/20" />
+        </div>
+        <button id="loginBtn" class="inline-flex items-center justify-center rounded-3xl bg-cyan-500 px-6 py-3 text-sm font-semibold text-slate-950 transition hover:bg-cyan-400">Unlock Vault</button>
+        <div id="authMessage" class="min-h-[1.5rem] text-sm font-medium"></div>
+      </div>
+    </div>
+
+    <div id="vaultApp" class="hidden">
+      <div class="glass rounded-3xl border border-white/10 p-8 shadow-2xl shadow-slate-900/40">
+        <div class="mb-8 flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+          <div>
+            <div class="inline-flex items-center gap-3 rounded-full bg-slate-900/70 px-4 py-2 text-sm text-slate-300 shadow-sm shadow-slate-950/30">
+              <span class="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-cyan-500/15 text-cyan-300 text-lg">🗄️</span>
+              <span>Your private file vault</span>
+            </div>
+            <h1 class="mt-6 text-5xl font-semibold tracking-tight text-white">Secure Vault</h1>
+            <p class="mt-3 text-slate-400 max-w-2xl">Store documents, photos, videos and confidential files in a local encrypted vault. Only your browser can access it.</p>
+          </div>
+          <button id="logoutBtn" class="inline-flex items-center justify-center rounded-3xl border border-slate-700 bg-slate-950/90 px-6 py-3 text-sm font-semibold text-slate-100 transition hover:border-slate-500">Lock Vault</button>
+        </div>
+
+        <div class="grid gap-4 md:grid-cols-3 mb-6">
+          <div class="rounded-3xl border border-slate-800 bg-slate-900/95 p-5">
+            <p class="text-2xl">📄</p>
+            <h3 class="mt-3 text-lg font-semibold text-white">Documents</h3>
+            <p class="mt-2 text-sm text-slate-400">Encrypt PDFs, text files, reports and notes.</p>
+          </div>
+          <div class="rounded-3xl border border-slate-800 bg-slate-900/95 p-5">
+            <p class="text-2xl">📷</p>
+            <h3 class="mt-3 text-lg font-semibold text-white">Photos</h3>
+            <p class="mt-2 text-sm text-slate-400">Store images securely with local browser encryption.</p>
+          </div>
+          <div class="rounded-3xl border border-slate-800 bg-slate-900/95 p-5">
+            <p class="text-2xl">🎬</p>
+            <h3 class="mt-3 text-lg font-semibold text-white">Videos</h3>
+            <p class="mt-2 text-sm text-slate-400">Protect video files in your private vault library.</p>
+          </div>
+        </div>
+
+        <div class="grid gap-6 lg:grid-cols-[1.2fr,0.8fr]">
+          <section class="space-y-5">
+            <div class="rounded-3xl border border-slate-800 bg-slate-900/90 p-6">
+              <h2 class="text-2xl font-semibold">Store a new file</h2>
+              <p class="mt-2 text-slate-400">Click the button below to open your secure upload vault popup.</p>
+              <div class="mt-6 space-y-4">
+                <button id="uploadBtn" class="inline-flex items-center justify-center rounded-3xl bg-cyan-500 px-5 py-3 text-sm font-semibold text-slate-950 transition hover:bg-cyan-400">Upload files</button>
+                <div class="flex flex-wrap gap-3">
+                  <button id="clearBtn" class="inline-flex items-center justify-center rounded-3xl border border-slate-700 px-5 py-3 text-sm font-semibold text-slate-100 transition hover:border-slate-500">Clear Vault</button>
+                </div>
+                <div id="message" class="min-h-[1.5rem] text-sm font-medium"></div>
+              </div>
+            </div>
+
+            <div class="rounded-3xl border border-slate-800 bg-slate-900/90 p-6">
+              <h2 class="text-2xl font-semibold">Private storage</h2>
+              <ul class="mt-4 space-y-3 text-slate-400">
+                <li>• Store documents, photos, videos, and other files.</li>
+                <li>• Files are saved locally in your browser.</li>
+                <li>• Quickly download files again any time.</li>
+                <li>• No backend server is required.</li>
+              </ul>
+            </div>
+          </section>
+
+          <section class="rounded-3xl border border-slate-800 bg-slate-900/90 p-6">
+            <h2 class="text-2xl font-semibold">Vault contents</h2>
+            <p class="mt-2 text-slate-400">Stored files are listed below and can be downloaded directly.</p>
+            <div class="mt-6 overflow-hidden rounded-3xl border border-slate-800 bg-slate-950/90">
+              <div class="max-h-[420px] overflow-y-auto hidden-scroll p-4">
+                <div id="vaultList" class="space-y-4"></div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="uploadModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 px-4 py-6">
+    <div class="w-full max-w-lg rounded-3xl bg-slate-900 shadow-2xl shadow-slate-950/60">
+      <div class="flex items-center justify-between border-b border-slate-800 px-6 py-4">
+        <div>
+          <h2 class="text-xl font-semibold text-white">Upload file to vault</h2>
+          <p class="mt-1 text-sm text-slate-400">Select a file and add it to your private vault.</p>
+        </div>
+        <button id="modalCloseBtn" class="text-slate-400 transition hover:text-white">✕</button>
+      </div>
+      <div class="px-6 py-6">
+        <div class="space-y-4">
+          <div>
+            <label class="mb-2 block text-sm font-medium text-slate-300">File</label>
+            <input id="fileInput" type="file" class="w-full rounded-3xl border border-slate-700 bg-slate-950/90 px-4 py-3 text-slate-100 outline-none" />
+          </div>
+          <div class="flex flex-wrap gap-3">
+            <button id="encryptBtn" class="inline-flex items-center justify-center rounded-3xl bg-cyan-500 px-5 py-3 text-sm font-semibold text-slate-950 transition hover:bg-cyan-400">Upload & Save</button>
+            <button id="modalCancelBtn" class="inline-flex items-center justify-center rounded-3xl border border-slate-700 px-5 py-3 text-sm font-semibold text-slate-100 transition hover:border-slate-500">Cancel</button>
+          </div>
+          <div id="modalMessage" class="min-h-[1.5rem] text-sm font-medium text-slate-200"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
